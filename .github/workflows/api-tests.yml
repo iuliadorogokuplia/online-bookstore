@@ -30,6 +30,9 @@ jobs:
       - name: Static Code Analysis (Checkstyle)
         run: mvn checkstyle:check
 
+      - name: Dependency Check
+        run: mvn org.owasp:dependency-check-maven:check
+
       - name: Execute Tests
         # We use -Dbase.url to demonstrate Senior level parametrization
         run: mvn clean test -Dbase.url=https://fakerestapi.azurewebsites.net
