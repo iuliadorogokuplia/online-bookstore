@@ -30,8 +30,16 @@ jobs:
       - name: Static Code Analysis (Checkstyle)
         run: mvn checkstyle:check
 
-      - name: Dependency Check
-        run: mvn org.owasp:dependency-check-maven:check
+      - name: Cache Dependency Check data
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: ${{ runner.os }}-dependency-check-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-dependency-check-
+
+      - name: Build and Dependency Check
+        run: mvn org.owasp:dependency-check-maven:12.2.0:check
 
       - name: Execute Tests
         # We use -Dbase.url to demonstrate Senior level parametrization
