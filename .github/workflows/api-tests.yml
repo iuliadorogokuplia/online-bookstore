@@ -34,12 +34,15 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository/org/owasp/dependency-check-data
-          key: ${{ runner.os }}-dependency-check-${{ github.run_id }}
+          key: ${{ runner.os }}-dependency-check-v1
           restore-keys: |
             ${{ runner.os }}-dependency-check-
 
+      - name: Purge Dependency Check (Fix Corrupted DB)
+        run: mvn org.owasp:dependency-check-maven:12.2.0:purge
+
       - name: Build and Dependency Check
-        run: mvn org.owasp:dependency-check-maven:12.2.0:check
+        run: mvn org.owasp:dependency-check-maven:12.2.0:check --no-transfer-progress
 
       - name: Execute Tests
         # We use -Dbase.url to demonstrate Senior level parametrization
