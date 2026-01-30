@@ -58,5 +58,4 @@ public class AuthorsClient extends BaseClient implements CrudOperations<AuthorDt
                 .pathParam("id", id)
                 .delete(AUTHORS_ENDPOINT + "/{id}");
     }
-
 }

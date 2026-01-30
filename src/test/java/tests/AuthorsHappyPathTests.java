@@ -147,5 +147,4 @@ public class AuthorsHappyPathTests extends BaseTest {
                 .then()
                 .statusCode(200);
     }
-
 }

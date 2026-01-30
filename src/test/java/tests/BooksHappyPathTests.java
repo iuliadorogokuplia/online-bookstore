@@ -169,5 +169,4 @@ public class BooksHappyPathTests extends BaseTest{
                 .then()
                 .statusCode(200);
     }
-
 }

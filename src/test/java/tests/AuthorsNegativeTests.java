@@ -61,5 +61,4 @@ public class AuthorsNegativeTests extends BaseTest {
                 .then()
                 .statusCode(400);
     }
-
 }

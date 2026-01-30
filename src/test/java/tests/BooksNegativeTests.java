@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.hamcrest.Matchers.*;
 
 /**
- * Negative test suite for Books Management API.
+ * Positive test suite for Books Management API.
  */
 @Epic("Online Bookstore")
 @Feature("Books Management - Negative Scenarios")
@@ -47,21 +47,8 @@ public class BooksNegativeTests extends BaseTest{
                 .build();
         booksClient.create(invalidBook)
                 .then()
-                .statusCode(anyOf(is(400), is(422)))
+                .statusCode(400)
                 .log().ifValidationFails();
-    }
-
-    @Test
-    @Severity(SeverityLevel.NORMAL)
-    @Story("Empty Request Body")
-    @DisplayName("Negative: Create book with empty JSON body")
-    public void testCreateBookWithEmptyBody() {
-        io.restassured.RestAssured.given()
-                .header("Content-Type", "application/json")
-                .body("{}")
-                .post(utils.ConfigReader.getBaseUrl() + "/api/v1/Books")
-                .then()
-                .statusCode(anyOf(is(400), is(200))); // Some APIs might default fields
     }
 
     @Test
@@ -75,7 +62,7 @@ public class BooksNegativeTests extends BaseTest{
                 .build();
         booksClient.create(sqlInjectionBook)
                 .then()
-                .statusCode(not(500)); // The system must not crash
+                .statusCode(400);
     }
 
     @Test
@@ -88,9 +75,23 @@ public class BooksNegativeTests extends BaseTest{
                 .title(longTitle)
                 .description("Testing payload size limits")
                 .build();
-
         booksClient.create(book)
                 .then()
-                .statusCode(lessThan(500));
+                .statusCode(400);
+    }
+
+    //The test fails because the FakeRestAPI implementation is non-persistent and lacks server-side validation,
+    // returning 200 OK instead of the expected 400 Bad Request for invalid input.
+    @Test
+    @Severity(SeverityLevel.NORMAL)
+    @Story("Empty Request Body")
+    @DisplayName("Negative: Create book with empty JSON body")
+    public void testCreateBookWithEmptyBody() {
+        io.restassured.RestAssured.given()
+                .header("Content-Type", "application/json")
+                .body("{}")
+                .post(utils.ConfigReader.getBaseUrl() + "/api/v1/Books")
+                .then()
+                .statusCode(400);
     }
 }

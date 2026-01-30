@@ -50,5 +50,4 @@ public class BooksClient extends BaseClient implements CrudOperations<BookDto>{
                 .pathParam("id", id)
                 .delete(BOOKS_ENDPOINT + "/{id}");
     }
-
 }
