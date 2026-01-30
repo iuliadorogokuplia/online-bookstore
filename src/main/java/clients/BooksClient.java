@@ -8,13 +8,14 @@ public class BooksClient extends BaseClient implements CrudOperations<BookDTO>{
     private static final String BOOKS_ENDPOINT = "/api/v1/Books";
 
     @Override
+    @Step("Retrieve all books")
     public Response getAll() {
         return getRequestSpec()
                 .get(BOOKS_ENDPOINT);
     }
 
     @Override
-    @Step("Creating a new book with ID: {book.id}")
+    @Step("Create a new book")
     public Response create(BookDTO book) {
         return getRequestSpec()
                 .body(book)
@@ -22,7 +23,7 @@ public class BooksClient extends BaseClient implements CrudOperations<BookDTO>{
     }
 
     @Override
-    @Step("Getting book by ID: {id}")
+    @Step("Get book by ID: {id}")
     public Response getById(int id) {
         return getRequestSpec()
                 .pathParam("id", id)
@@ -30,6 +31,7 @@ public class BooksClient extends BaseClient implements CrudOperations<BookDTO>{
     }
 
     @Override
+    @Step("Update book by ID: {id}")
     public Response update(int id, BookDTO book) {
         return getRequestSpec()
                 .pathParam("id", id)
@@ -38,6 +40,7 @@ public class BooksClient extends BaseClient implements CrudOperations<BookDTO>{
     }
 
     @Override
+    @Step("Delete book by ID: {id}")
     public Response delete(int id) {
         return getRequestSpec()
                 .pathParam("id", id)

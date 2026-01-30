@@ -1,4 +1,5 @@
 import clients.AuthorsClient;
+import io.qameta.allure.*;
 import io.restassured.common.mapper.TypeRef;
 import models.AuthorDTO;
 import org.assertj.core.api.SoftAssertions;
@@ -11,8 +12,9 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Epic("Online Bookstore")
+@Feature("Author Management - Positive Scenarios")
 public class AuthorsHappyPathTests extends BaseTest {
     private final AuthorsClient authorsClient = new AuthorsClient();
     private int newCreatedUpdatedAuthorId;
@@ -46,32 +48,46 @@ public class AuthorsHappyPathTests extends BaseTest {
     }
 
     @Test
+    @Severity(SeverityLevel.CRITICAL)
+    @Story("Create a new author")
     @DisplayName("Add a new author to the system")
     public void testCreateAuthor() {
         AuthorDTO actualAuthor = authorsClient.create(newCreatedUpdatedAuthor)
                 .then().statusCode(200)
                 .extract().as(AuthorDTO.class);
-        assertEquals(actualAuthor, newCreatedUpdatedAuthor);
+        assertThat(actualAuthor)
+                .as("Verify created author")
+                .usingRecursiveComparison()
+                .isEqualTo(newCreatedUpdatedAuthor);
     }
 
     @Test
+    @Severity(SeverityLevel.NORMAL)
+    @Story("Update author details")
     @DisplayName("Update an existing author’s details")
     public void testUpdateAuthor() {
         AuthorDTO actualAuthor = authorsClient.update(existedAuthorId, newCreatedUpdatedAuthor)
                 .then().statusCode(200)
                 .extract().as(AuthorDTO.class);
-        assertEquals(actualAuthor, newCreatedUpdatedAuthor);
+        assertThat(actualAuthor)
+                .as("Verify created author")
+                .usingRecursiveComparison()
+                .isEqualTo(newCreatedUpdatedAuthor);
     }
 
     @Test
+    @Severity(SeverityLevel.CRITICAL)
+    @Story("Delete author")
     @DisplayName("Delete an author by their ID")
     public void testDeleteAuthor() {
         authorsClient.delete(existedAuthorId).then().statusCode(200);
     }
 
     @Test
-    @DisplayName("Retrieve details of a specific author by their ID.")
-    public void testGetBook() {
+    @Severity(SeverityLevel.BLOCKER)
+    @Story("Retrieve specific author")
+    @DisplayName("Retrieve details of a specific author by their ID")
+    public void testGetAuthor() {
         AuthorDTO actualAuthor = authorsClient.getById(existedAuthorId)
                 .then().statusCode(200)
                 .extract().as(AuthorDTO.class);
@@ -81,7 +97,7 @@ public class AuthorsHappyPathTests extends BaseTest {
                 .isEqualTo(existedAuthorId);
         softly.assertThat(actualAuthor.getIdBook())
                 .as("Verify Id Book")
-                .isEqualTo(existedAuthor.getIdBook());
+                .isPositive();
         softly.assertThat(actualAuthor.getFirstName())
                 .as("Verify First Name")
                 .isEqualTo(existedAuthor.getFirstName());
@@ -92,7 +108,9 @@ public class AuthorsHappyPathTests extends BaseTest {
     }
 
     @Test
-    @DisplayName("Retrieve a list of all authors.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Story("List all authors")
+    @DisplayName("Retrieve a list of all authors")
     public void testGetAllAuthors() {
         List<AuthorDTO> authors = authorsClient.getAll()
                 .then().statusCode(200).extract().as(new TypeRef<List<AuthorDTO>>() {

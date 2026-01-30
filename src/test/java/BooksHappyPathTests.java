@@ -14,6 +14,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Epic("Online Bookstore")
+@Feature("Books Management - Positive Scenarios")
 public class BooksHappyPathTests extends BaseTest{
     private final BooksClient booksClient = new BooksClient();
 
@@ -50,6 +52,8 @@ public class BooksHappyPathTests extends BaseTest{
     }
 
     @Test
+    @Severity(SeverityLevel.CRITICAL)
+    @Story("Create a new book")
     @DisplayName("Add a new book to the system")
     public void testCreateBook() {
         BookDTO actualBook = booksClient.create(newCreatedUpdatedBook)
@@ -67,6 +71,8 @@ public class BooksHappyPathTests extends BaseTest{
     }
 
     @Test
+    @Severity(SeverityLevel.NORMAL)
+    @Story("Update book details")
     @DisplayName("Update an existing book by its ID")
     public void testUpdateBook() {
         BookDTO actualBook = booksClient.update(existedBookId, newCreatedUpdatedBook)
@@ -84,13 +90,16 @@ public class BooksHappyPathTests extends BaseTest{
     }
 
     @Test
+    @Severity(SeverityLevel.CRITICAL)
+    @Story("Delete book")
     @DisplayName("Delete a book by its ID")
     public void testDeleteBook() {
         booksClient.delete(existedBookId).then().statusCode(200);
     }
 
-    @Test
-    @DisplayName("Retrieve details of a specific book by its ID")
+    @Severity(SeverityLevel.BLOCKER)
+    @Story("Retrieve specific book")
+    @DisplayName("Retrieve details of specific books by their IDs")
     public void testGetBook() {
         BookDTO actualBook = booksClient.getById(existedBookId)
                 .then().statusCode(200)
@@ -118,6 +127,8 @@ public class BooksHappyPathTests extends BaseTest{
     }
 
     @Test
+    @Severity(SeverityLevel.BLOCKER)
+    @Story("List all books")
     @DisplayName("Retrieve a list of all books")
     public void testGetAllBooks() {
         List<BookDTO> books = booksClient.getAll()

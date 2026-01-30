@@ -7,5 +7,6 @@ public abstract class BaseTest {
     @BeforeAll
     static void setup() {
         RestAssured.filters(new AllureRestAssured());
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
 }
