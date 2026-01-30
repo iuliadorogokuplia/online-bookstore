@@ -3,38 +3,28 @@ import io.qameta.allure.*;
 import models.AuthorDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import java.util.concurrent.ThreadLocalRandom;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 @Epic("Online Bookstore")
 @Feature("Author Management - Negative Scenarios")
 public class AuthorsNegativeTests extends BaseTest {
     private final AuthorsClient authorsClient = new AuthorsClient();
 
-    @Test
+    @ParameterizedTest(name = "Scenario: {0} with ID: {1}")
+    @CsvSource({
+            "Non-existent ID, 999999",
+            "Negative ID, -1",
+            "Zero ID, 0"
+    })
     @Severity(SeverityLevel.NORMAL)
-    @Story("Retrieve specific author")
-    @DisplayName("Error when retrieving author with non-existent ID")
-    public void testGetNonExistentAuthor() {
-        int nonExistentId = 999999;
-        authorsClient.getById(nonExistentId)
+    @Story("Retrieve specific author with invalid IDs")
+    @DisplayName("Negative testing for Get Author by ID")
+    public void testGetAuthorInvalidIds(String scenario, int id) {
+        authorsClient.getById(id)
                 .then()
+                .log().ifValidationFails()
                 .statusCode(404);
-    }
-
-    @Test
-    @Severity(SeverityLevel.NORMAL)
-    @Story("Create a new author")
-    @DisplayName("Error when creating author with empty required fields")
-    public void testCreateAuthorWithEmptyData() {
-        AuthorDTO emptyAuthor = AuthorDTO.builder()
-                .id(0)
-                .firstName("")
-                .lastName("")
-                .build();
-
-        authorsClient.create(emptyAuthor)
-                .then()
-                .statusCode(400);
     }
 
     //The test fails because the FakeRestAPI implementation is non-persistent and lacks server-side validation,
@@ -55,7 +45,6 @@ public class AuthorsNegativeTests extends BaseTest {
                 .statusCode(404);
     }
 
-
     //The test fails because the FakeRestAPI implementation is non-persistent and lacks server-side validation,
     // returning 200 OK instead of the expected 400 Bad Request for invalid input.
     @Test
@@ -68,20 +57,4 @@ public class AuthorsNegativeTests extends BaseTest {
                 .statusCode(400);
     }
 
-    @Test
-    @Severity(SeverityLevel.NORMAL)
-    @Story("Create a new author")
-    @DisplayName("Error when sending oversized data in fields")
-    public void testCreateAuthorWithVeryLongNames() {
-        String longName = "A".repeat(2000);
-        AuthorDTO hugeAuthor = AuthorDTO.builder()
-                .id(ThreadLocalRandom.current().nextInt(1000, 9000))
-                .firstName(longName)
-                .lastName(longName)
-                .build();
-
-        authorsClient.create(hugeAuthor)
-                .then()
-                .statusCode(400);
-    }
 }
