@@ -34,15 +34,17 @@ public class AuthorsHappyPathTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        //In a real-world production environment, relying on static data (like hardcoded IDs) makes tests 'brittle'
-        // and prone to failure if the database state changes.
-        // To ensure test isolation and reliability, it is best practice to avoid static constants.
-        // Better to create dynamically a new authorDTO during the setup phase
-        // use its unique ID throughout the test,
-        // and ideally clean it up afterwards.
-        // This ensures that each test is independent and repeatable.
-        //In the context of FakeRestAPI, since the server doesn't actually persist (save) new records permanently to a real database,
-        //I am essentially working with "mocked" or "volatile" data.
+        /**
+         * In a real-world production environment, relying on static data (like hardcoded IDs) makes tests 'brittle'
+         * and prone to failure if the database state changes.
+         * To ensure test isolation and reliability, it is best practice to avoid static constants.
+         * Better to create dynamically a new authorDTO during the setup phase
+         * use its unique ID throughout the test,
+         * and ideally clean it up afterwards.
+         * This ensures that each test is independent and repeatable.
+         * In the context of FakeRestAPI, since the server doesn't actually persist (save) new records permanently to a real database,
+         * I am essentially working with "mocked" or "volatile" data.
+         */
         newCreatedUpdatedAuthorId = ThreadLocalRandom.current().nextInt(10000, 100000);
         newCreatedUpdatedAuthor = AuthorDto.builder()
                 .id(newCreatedUpdatedAuthorId)
