@@ -37,3 +37,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Test Reports (The files cluttering your previous commit)
+.allure/
+allure-results/
+allure-report/
