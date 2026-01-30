@@ -2,9 +2,13 @@ package clients;
 
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
-import models.AuthorDTO;
+import models.AuthorDto;
 
-public class AuthorsClient extends BaseClient implements CrudOperations<AuthorDTO>{
+/**
+ * Implementation of API client for Author-related operations.
+ * Extends BaseClient for shared request specifications.
+ */
+public class AuthorsClient extends BaseClient implements CrudOperations<AuthorDto>{
     private static final String AUTHORS_ENDPOINT = "/api/v1/Authors";
     private static final String AUTHOR_BY_BOOK_ENDPOINT = AUTHORS_ENDPOINT + "/authors/books";
 
@@ -17,7 +21,7 @@ public class AuthorsClient extends BaseClient implements CrudOperations<AuthorDT
 
     @Override
     @Step("Create a new author")
-    public Response create(AuthorDTO author) {
+    public Response create(AuthorDto author) {
         return getRequestSpec()
                 .body(author)
                 .post(AUTHORS_ENDPOINT);
@@ -40,7 +44,7 @@ public class AuthorsClient extends BaseClient implements CrudOperations<AuthorDT
 
     @Override
     @Step("Update author by ID: {id}")
-    public Response update(int id, AuthorDTO author) {
+    public Response update(int id, AuthorDto author) {
         return getRequestSpec()
                 .pathParam("id", id)
                 .body(author)

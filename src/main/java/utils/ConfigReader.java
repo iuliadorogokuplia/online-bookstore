@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Utility class for managing project configuration.
+ */
 public class ConfigReader {
     private static final Properties PROPERTIES = new Properties();
     private static final String CONFIG_PATH = "config.properties";

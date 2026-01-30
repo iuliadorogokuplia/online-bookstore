@@ -1,11 +1,16 @@
+package tests;
+
 import clients.AuthorsClient;
 import io.qameta.allure.*;
-import models.AuthorDTO;
+import models.AuthorDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+/**
+ * Negative test suite for Author Management API.
+ */
 @Epic("Online Bookstore")
 @Feature("Author Management - Negative Scenarios")
 public class AuthorsNegativeTests extends BaseTest {
@@ -35,7 +40,7 @@ public class AuthorsNegativeTests extends BaseTest {
     @DisplayName("Error when updating author that does not exist")
     public void testUpdateNonExistentAuthor() {
         int nonExistentId = 888888;
-        AuthorDTO updateData = AuthorDTO.builder()
+        AuthorDto updateData = AuthorDto.builder()
                 .firstName("No")
                 .lastName("One")
                 .build();

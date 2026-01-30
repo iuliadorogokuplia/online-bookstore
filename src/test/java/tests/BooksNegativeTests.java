@@ -1,7 +1,8 @@
+package tests;
 
 import clients.BooksClient;
 import io.qameta.allure.*;
-import models.BookDTO;
+import models.BookDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,6 +11,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.hamcrest.Matchers.*;
 
+/**
+ * Negative test suite for Books Management API.
+ */
 @Epic("Online Bookstore")
 @Feature("Books Management - Negative Scenarios")
 public class BooksNegativeTests extends BaseTest{
@@ -37,7 +41,7 @@ public class BooksNegativeTests extends BaseTest{
     @Story("Create book with invalid date format")
     @DisplayName("Negative: Create book with malformed publishDate")
     public void testCreateBookWithInvalidDate(String invalidDate) {
-        BookDTO invalidBook = BookDTO.builder()
+        BookDto invalidBook = BookDto.builder()
                 .title("Edge Case Date")
                 .publishDate(invalidDate)
                 .build();
@@ -65,7 +69,7 @@ public class BooksNegativeTests extends BaseTest{
     @Story("Security - SQL Injection")
     @DisplayName("Security: SQL Injection attempt in book title")
     public void testSqlInjectionInTitle() {
-        BookDTO sqlInjectionBook = BookDTO.builder()
+        BookDto sqlInjectionBook = BookDto.builder()
                 .title("'; DROP TABLE Books; --")
                 .description("Security Risk Test")
                 .build();
@@ -80,7 +84,7 @@ public class BooksNegativeTests extends BaseTest{
     @DisplayName("Negative: Create book with 5000 character title")
     public void testLongTitleBoundary() {
         String longTitle = "A".repeat(5000);
-        BookDTO book = BookDTO.builder()
+        BookDto book = BookDto.builder()
                 .title(longTitle)
                 .description("Testing payload size limits")
                 .build();

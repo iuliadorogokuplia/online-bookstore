@@ -1,7 +1,9 @@
+package tests;
+
 import clients.BooksClient;
 import io.qameta.allure.*;
 import io.restassured.common.mapper.TypeRef;
-import models.BookDTO;
+import models.BookDto;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +16,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Positive test suite for Books Management API.
+ */
 @Epic("Online Bookstore")
 @Feature("Books Management - Positive Scenarios")
 public class BooksHappyPathTests extends BaseTest{
@@ -21,9 +26,9 @@ public class BooksHappyPathTests extends BaseTest{
 
     private int newCreatedUpdatedBookId;
     private final int existedBookId = 3;
-    BookDTO newCreatedUpdatedBook;
+    BookDto newCreatedUpdatedBook;
 
-    BookDTO existedBook = BookDTO.builder()
+    BookDto existedBook = BookDto.builder()
             .id(3)
             .title("Book 3")
             .pageCount(300)
@@ -41,7 +46,7 @@ public class BooksHappyPathTests extends BaseTest{
         //In the context of FakeRestAPI, since the server doesn't actually persist (save) new records permanently to a real database,
         //I am essentially working with "mocked" or "volatile" data.
         newCreatedUpdatedBookId = ThreadLocalRandom.current().nextInt(10000, 100000);
-        newCreatedUpdatedBook = BookDTO.builder()
+        newCreatedUpdatedBook = BookDto.builder()
                 .id(newCreatedUpdatedBookId)
                 .title("Clean Architecture")
                 .description("Solid principles in practice")
@@ -56,9 +61,9 @@ public class BooksHappyPathTests extends BaseTest{
     @Story("Create a new book")
     @DisplayName("Add a new book to the system")
     public void testCreateBook() {
-        BookDTO actualBook = booksClient.create(newCreatedUpdatedBook)
+        BookDto actualBook = booksClient.create(newCreatedUpdatedBook)
                 .then().statusCode(200)
-                .extract().as(BookDTO.class);
+                .extract().as(BookDto.class);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(actualBook)
                 .usingRecursiveComparison()
@@ -75,9 +80,9 @@ public class BooksHappyPathTests extends BaseTest{
     @Story("Update book details")
     @DisplayName("Update an existing book by its ID")
     public void testUpdateBook() {
-        BookDTO actualBook = booksClient.update(existedBookId, newCreatedUpdatedBook)
+        BookDto actualBook = booksClient.update(existedBookId, newCreatedUpdatedBook)
                 .then().statusCode(200)
-                .extract().as(BookDTO.class);
+                .extract().as(BookDto.class);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(actualBook)
                 .usingRecursiveComparison()
@@ -101,9 +106,9 @@ public class BooksHappyPathTests extends BaseTest{
     @Story("Retrieve specific book")
     @DisplayName("Retrieve details of specific books by their IDs")
     public void testGetBook() {
-        BookDTO actualBook = booksClient.getById(existedBookId)
+        BookDto actualBook = booksClient.getById(existedBookId)
                 .then().statusCode(200)
-                .extract().as(BookDTO.class);
+                .extract().as(BookDto.class);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(actualBook.getId())
                 .as("Verify id")
@@ -131,8 +136,8 @@ public class BooksHappyPathTests extends BaseTest{
     @Story("List all books")
     @DisplayName("Retrieve a list of all books")
     public void testGetAllBooks() {
-        List<BookDTO> books = booksClient.getAll()
-                .then().statusCode(200).extract().as(new TypeRef<List<BookDTO>>() {
+        List<BookDto> books = booksClient.getAll()
+                .then().statusCode(200).extract().as(new TypeRef<List<BookDto>>() {
                 });
         assertThat(books)
                 .as("List of books from API")

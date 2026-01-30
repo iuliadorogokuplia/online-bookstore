@@ -1,7 +1,9 @@
+package tests;
+
 import clients.AuthorsClient;
 import io.qameta.allure.*;
 import io.restassured.common.mapper.TypeRef;
-import models.AuthorDTO;
+import models.AuthorDto;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,14 +15,17 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Positive test suite for Author Management API.
+ */
 @Epic("Online Bookstore")
 @Feature("Author Management - Positive Scenarios")
 public class AuthorsHappyPathTests extends BaseTest {
     private final AuthorsClient authorsClient = new AuthorsClient();
     private int newCreatedUpdatedAuthorId;
     private final int existedAuthorId = 3;
-    AuthorDTO newCreatedUpdatedAuthor;
-    AuthorDTO existedAuthor = AuthorDTO.builder()
+    AuthorDto newCreatedUpdatedAuthor;
+    AuthorDto existedAuthor = AuthorDto.builder()
             .id(3)
             .idBook(1)
             .firstName("First Name 3")
@@ -39,7 +44,7 @@ public class AuthorsHappyPathTests extends BaseTest {
         //In the context of FakeRestAPI, since the server doesn't actually persist (save) new records permanently to a real database,
         //I am essentially working with "mocked" or "volatile" data.
         newCreatedUpdatedAuthorId = ThreadLocalRandom.current().nextInt(10000, 100000);
-        newCreatedUpdatedAuthor = AuthorDTO.builder()
+        newCreatedUpdatedAuthor = AuthorDto.builder()
                 .id(newCreatedUpdatedAuthorId)
                 .idBook(2)
                 .firstName("Tested First Name")
@@ -52,9 +57,9 @@ public class AuthorsHappyPathTests extends BaseTest {
     @Story("Create a new author")
     @DisplayName("Add a new author to the system")
     public void testCreateAuthor() {
-        AuthorDTO actualAuthor = authorsClient.create(newCreatedUpdatedAuthor)
+        AuthorDto actualAuthor = authorsClient.create(newCreatedUpdatedAuthor)
                 .then().statusCode(200)
-                .extract().as(AuthorDTO.class);
+                .extract().as(AuthorDto.class);
         assertThat(actualAuthor)
                 .as("Verify created author")
                 .usingRecursiveComparison()
@@ -66,9 +71,9 @@ public class AuthorsHappyPathTests extends BaseTest {
     @Story("Update author details")
     @DisplayName("Update an existing author’s details")
     public void testUpdateAuthor() {
-        AuthorDTO actualAuthor = authorsClient.update(existedAuthorId, newCreatedUpdatedAuthor)
+        AuthorDto actualAuthor = authorsClient.update(existedAuthorId, newCreatedUpdatedAuthor)
                 .then().statusCode(200)
-                .extract().as(AuthorDTO.class);
+                .extract().as(AuthorDto.class);
         assertThat(actualAuthor)
                 .as("Verify created author")
                 .usingRecursiveComparison()
@@ -88,9 +93,9 @@ public class AuthorsHappyPathTests extends BaseTest {
     @Story("Retrieve specific author")
     @DisplayName("Retrieve details of a specific author by their ID")
     public void testGetAuthor() {
-        AuthorDTO actualAuthor = authorsClient.getById(existedAuthorId)
+        AuthorDto actualAuthor = authorsClient.getById(existedAuthorId)
                 .then().statusCode(200)
-                .extract().as(AuthorDTO.class);
+                .extract().as(AuthorDto.class);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(actualAuthor.getId())
                 .as("Verify id")
@@ -112,8 +117,8 @@ public class AuthorsHappyPathTests extends BaseTest {
     @Story("List all authors")
     @DisplayName("Retrieve a list of all authors")
     public void testGetAllAuthors() {
-        List<AuthorDTO> authors = authorsClient.getAll()
-                .then().statusCode(200).extract().as(new TypeRef<List<AuthorDTO>>() {
+        List<AuthorDto> authors = authorsClient.getAll()
+                .then().statusCode(200).extract().as(new TypeRef<List<AuthorDto>>() {
                 });
         assertThat(authors)
                 .as("List of author from API")
