@@ -27,6 +27,9 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Static Code Analysis (Checkstyle)
+        run: mvn checkstyle:check
+
       - name: Execute Tests
         # We use -Dbase.url to demonstrate Senior level parametrization
         run: mvn clean test -Dbase.url=https://fakerestapi.azurewebsites.net
