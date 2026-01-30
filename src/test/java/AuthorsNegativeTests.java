@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.concurrent.ThreadLocalRandom;
 
-
 @Epic("Online Bookstore")
 @Feature("Author Management - Negative Scenarios")
 public class AuthorsNegativeTests extends BaseTest {
@@ -38,6 +37,8 @@ public class AuthorsNegativeTests extends BaseTest {
                 .statusCode(400);
     }
 
+    //The test fails because the FakeRestAPI implementation is non-persistent and lacks server-side validation,
+    // returning 200 OK instead of the expected 404 Bad Request for invalid input.
     @Test
     @Severity(SeverityLevel.NORMAL)
     @Story("Update author details")
@@ -54,6 +55,9 @@ public class AuthorsNegativeTests extends BaseTest {
                 .statusCode(404);
     }
 
+
+    //The test fails because the FakeRestAPI implementation is non-persistent and lacks server-side validation,
+    // returning 200 OK instead of the expected 400 Bad Request for invalid input.
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @Story("Delete author")
